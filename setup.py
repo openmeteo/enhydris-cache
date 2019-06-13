@@ -35,7 +35,7 @@ setup(
         "Programming Language :: Python :: 3.6",
     ],
     description="Utilities for spatial integration of time series",
-    entry_points={"console_scripts": ["spatialize=enhydris_cache.cli:main"]},
+    entry_points={"console_scripts": ["enhydris-cache=enhydris_cache.cli:main"]},
     install_requires=requirements,
     license="GNU General Public License v3",
     long_description=readme + "\n\n" + history,
