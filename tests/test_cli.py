@@ -246,15 +246,14 @@ class EnhydrisCacheE2eTestCase(TestCase):
         self.api_client = EnhydrisApiClient(self.parms["base_url"])
         self.api_client.__enter__()
         with self.api_client.session:
-            self.api_client.login(self.parms["user"], self.parms["password"])
+            self.api_client.login(self.parms["username"], self.parms["password"])
             self.station1_id = self.api_client.post_station(
                 {
                     "name": "station1",
                     "original_srid": 4326,
-                    "point": "POINT (23.78743 37.97385)",
+                    "geom": "POINT (23.78743 37.97385)",
                     "copyright_holder": "Joe User",
                     "copyright_years": "2014",
-                    "stype": 1,
                     "owner": self.parms["owner_id"],
                 }
             )
@@ -266,19 +265,16 @@ class EnhydrisCacheE2eTestCase(TestCase):
                     "unit_of_measurement": self.parms["unit_of_measurement_id"],
                     "time_zone": self.parms["time_zone_id"],
                     "precision": 0,
-                    "time_step": 3,
-                    "timestamp_offset_minutes": 0,
-                    "timestamp_offset_months": 0,
+                    "time_step": "D",
                 },
             )
             self.station2_id = self.api_client.post_station(
                 {
                     "name": "station1",
                     "original_srid": 4326,
-                    "point": "POINT (24.56789 38.76543)",
+                    "geom": "POINT (24.56789 38.76543)",
                     "copyright_holder": "Joe User",
                     "copyright_years": "2014",
-                    "stype": 1,
                     "owner": self.parms["owner_id"],
                 }
             )
@@ -290,9 +286,7 @@ class EnhydrisCacheE2eTestCase(TestCase):
                     "unit_of_measurement": self.parms["unit_of_measurement_id"],
                     "time_zone": self.parms["time_zone_id"],
                     "precision": 2,
-                    "time_step": 3,
-                    "timestamp_offset_minutes": 0,
-                    "timestamp_offset_months": 0,
+                    "time_step": "D",
                 },
             )
 
@@ -321,7 +315,7 @@ class EnhydrisCacheE2eTestCase(TestCase):
                     station_id = {self.station1_id}
                     timeseries_id = {self.timeseries1_id}
                     file = file1
-                    user = {self.parms[user]}
+                    user = {self.parms[username]}
                     password = {self.parms[password]}
 
                     [timeseries2]
@@ -329,7 +323,7 @@ class EnhydrisCacheE2eTestCase(TestCase):
                     station_id = {self.station2_id}
                     timeseries_id = {self.timeseries2_id}
                     file = file2
-                    user = {self.parms[user]}
+                    user = {self.parms[username]}
                     password = {self.parms[password]}
                     """
                 ).format(self=self, base_url=self.parms["base_url"])
@@ -358,13 +352,13 @@ class EnhydrisCacheE2eTestCase(TestCase):
         # Check that the files are what they should be
         with open("file1", newline="\n") as f:
             ts1_before = HTimeseries(f)
-        self.assertEqual(ts1_before.time_step, "1440,0")
+        self.assertEqual(ts1_before.time_step, "D")
         c = StringIO()
         ts1_before.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), self.timeseries1_top)
         with open("file2", newline="\n") as f:
             ts2_before = HTimeseries(f)
-        self.assertEqual(ts2_before.time_step, "1440,0")
+        self.assertEqual(ts2_before.time_step, "D")
         c = StringIO()
         ts2_before.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), self.timeseries2_top)
@@ -387,13 +381,13 @@ class EnhydrisCacheE2eTestCase(TestCase):
         # Check that the files are what they should be
         with open("file1", newline="\n") as f:
             ts1_after = HTimeseries(f)
-        self.assertEqual(ts1_after.time_step, "1440,0")
+        self.assertEqual(ts1_after.time_step, "D")
         c = StringIO()
         ts1_after.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), self.test_timeseries1)
         with open("file2", newline="\n") as f:
             ts2_after = HTimeseries(f)
-        self.assertEqual(ts2_after.time_step, "1440,0")
+        self.assertEqual(ts2_after.time_step, "D")
         c = StringIO()
         ts2_after.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), self.test_timeseries2)

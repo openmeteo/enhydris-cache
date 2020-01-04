@@ -55,7 +55,7 @@ def _get_hts_object(timeseries_id, start_date):
 
 
 def _set_hts_attributes(hts, timeseries_id):
-    hts.time_step = "1440,0"
+    hts.time_step = "D"
     hts.precision = 0 if timeseries_id == 42 else 2
     hts.comment = "Très importante"
 
@@ -109,13 +109,13 @@ class TimeseriesCacheTestCase(TestCase):
         # Check that the cached stuff is what it should be
         with open("file1", newline="\n") as f:
             ts1_before = HTimeseries(f)
-        self.assertEqual(ts1_before.time_step, "1440,0")
+        self.assertEqual(ts1_before.time_step, "D")
         c = StringIO()
         ts1_before.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), test_timeseries["42_top"])
         with open("file2", newline="\n") as f:
             ts2_before = HTimeseries(f)
-        self.assertEqual(ts2_before.time_step, "1440,0")
+        self.assertEqual(ts2_before.time_step, "D")
         c = StringIO()
         ts2_before.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), test_timeseries["43_top"])
@@ -126,13 +126,13 @@ class TimeseriesCacheTestCase(TestCase):
         # Check that the cached stuff is what it should be
         with open("file1", newline="\n") as f:
             ts1_after = HTimeseries(f)
-        self.assertEqual(ts1_after.time_step, "1440,0")
+        self.assertEqual(ts1_after.time_step, "D")
         c = StringIO()
         ts1_after.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), test_timeseries["42_all"])
         with open("file2", newline="\n") as f:
             ts2_after = HTimeseries(f)
-        self.assertEqual(ts2_after.time_step, "1440,0")
+        self.assertEqual(ts2_after.time_step, "D")
         c = StringIO()
         ts2_after.write(c)
         self.assertEqual(c.getvalue().replace("\r", ""), test_timeseries["43_all"])
