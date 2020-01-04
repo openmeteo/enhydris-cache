@@ -16,9 +16,9 @@ extensions = ["sphinx.ext.autodoc", "sphinx.ext.viewcode"]
 templates_path = ["_templates"]
 source_suffix = ".rst"
 master_doc = "index"
-project = u"enhydris_cache"
-copyright = u"2019, Antonis Christofides"
-author = u"Antonis Christofides"
+project = "enhydris_cache"
+copyright = "2019, Antonis Christofides"
+author = "Antonis Christofides"
 version = get_version()
 release = version
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -31,8 +31,8 @@ latex_documents = [
     (
         master_doc,
         "enhydris-cache.tex",
-        u"enhydris-cache Documentation",
-        u"Antonis Christofides",
+        "enhydris-cache Documentation",
+        "Antonis Christofides",
         "manual",
     )
 ]
@@ -40,7 +40,7 @@ texinfo_documents = [
     (
         master_doc,
         "enhydris-cache",
-        u"enhydris-cache Documentation",
+        "enhydris-cache Documentation",
         author,
         "enhydris-cache",
         "One line description of project.",
