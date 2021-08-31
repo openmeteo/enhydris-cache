@@ -37,7 +37,9 @@ test_timeseries["42_bottom"] = test_timeseries["42_all"].splitlines(True)[-1]
 test_timeseries["43_bottom"] = test_timeseries["43_all"].splitlines(True)[-1]
 
 
-def mock_read_tsdata(station_id, timeseries_id, start_date=None, end_date=None):
+def mock_read_tsdata(
+    station_id, timeseries_group_id, timeseries_id, start_date=None, end_date=None
+):
     result = _get_hts_object(timeseries_id, start_date)
     _set_hts_attributes(result, timeseries_id)
     return result
@@ -83,27 +85,27 @@ class TimeseriesCacheTestCase(TestCase):
     )
     def test_update(self, mock_api_client):
 
-        timeseries_group = [
+        two_timeseries = [
             {
                 "base_url": "https://mydomain.com",
                 "station_id": 2,
+                "timeseries_group_id": 22,
                 "timeseries_id": 42,
-                "user": "joe",
-                "password": "topsecret",
+                "auth_token": "01234567890abcdefghijklmnopqrstuvwxyz",
                 "file": "file1",
             },
             {
                 "base_url": "https://mydomain.com",
                 "station_id": 3,
+                "timeseries_group_id": 33,
                 "timeseries_id": 43,
-                "user": "joe",
-                "password": "topsecret",
+                "auth_token": "01234567890abcdefghijklmnopqrstuvwxyz",
                 "file": "file2",
             },
         ]
 
         # Cache the two timeseries
-        cache = TimeseriesCache(timeseries_group)
+        cache = TimeseriesCache(two_timeseries)
         cache.update()
 
         # Check that the cached stuff is what it should be

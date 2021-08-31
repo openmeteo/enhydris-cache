@@ -1,11 +1,14 @@
+dist: focal
 language: python
 python:
-  - 3.6
-  - 3.5
+  - 3.7
+  - 3.8
+  - 3.9
 
 install:
   - pip install --upgrade pip
   - pip install codecov coverage isort flake8 twine
+  - ./setup.py install
 
 script:
  - if python -c "import sys; exit(not (sys.version >= '3.6'))"; then pip install black; black --check .; fi
@@ -13,7 +16,7 @@ script:
  - isort --recursive --check-only --diff enhydris_cache tests
  - ./setup.py sdist bdist_wheel
  - twine check dist/*
- - coverage run --include="./*" --omit="docs/","*/tests/*","*/tests.py","setup.py" ./setup.py test
+ - coverage run --include="./*" --omit="docs/","*/tests/*","*/tests.py","setup.py" -m unittest -v
 
 after_success:
   - codecov

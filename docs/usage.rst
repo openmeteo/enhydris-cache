@@ -49,20 +49,22 @@ explanatory comments that follow it:
     [ntua]
     base_url = https://openmeteo.org/
     station_id = 1334
+    timeseries_group_id = 4321
     timeseries_id = 6539
     file = ntua.hts
 
     [nedontas]
     base_url = https://openmeteo.org/
     station_id = 1482
+    timeseries_group_id = 1234
     timeseries_id = 9356
     file = /somewhere/else/nedontas.hts
 
     [arta]
     base_url = https://upatras.gr/enhydris/
-    user = george
-    password = topsecret
+    auth_token = 123456789abcdef0123456789abcdef012345678
     station_id = 27
+    timeseries_group_id = 2727
     timeseries_id = 8765
     file = arta.hts
 
@@ -120,15 +122,20 @@ The name of the section is ignored.
 
    The id of the station.
 
+.. confval:: timeseries_group_id
+
+   The id of the time series group.
+
 .. confval:: timeseries_id
 
    The id of the time series.
 
-.. confval:: user
-             password
+.. confval:: auth_token
 
    Optional.  Needed if that Enhydris installation needs login in
-   order to provide access to the data.
+   order to provide access to the data. You can get a token at the
+   ``/api/auth/login/`` URL of Enhydris, such as
+   https://openmeteo.org/api/auth/login/.
 
 .. confval:: file
 
@@ -142,7 +149,7 @@ Author and copyright
 ``enhydris-cache`` was written by Antonis Christofides,
 anthony@itia.ntua.gr.
 
-| Copyright (C) 2019 University of Ioannina
+| Copyright (C) 2019-2021 University of Ioannina
 | Copyright (C) 2014 TEI of Epirus
 
 ``enhydris-cache`` is free software; you can redistribute it and/or

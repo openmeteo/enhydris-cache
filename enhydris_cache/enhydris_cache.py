@@ -14,9 +14,9 @@ class TimeseriesCache(object):
             if self.base_url[-1] != "/":
                 self.base_url += "/"
             self.station_id = item["station_id"]
+            self.timeseries_group_id = item["timeseries_group_id"]
             self.timeseries_id = item["timeseries_id"]
-            self.user = item["user"]
-            self.password = item["password"]
+            self.auth_token = item["auth_token"]
             self.filename = item["file"]
             self._update_for_one_timeseries()
 
@@ -45,10 +45,12 @@ class TimeseriesCache(object):
         return end_date
 
     def _append_newer_timeseries(self, start_date, old_ts):
-        with EnhydrisApiClient(self.base_url) as api_client:
-            api_client.login(self.user, self.password)
+        with EnhydrisApiClient(self.base_url, token=self.auth_token) as api_client:
             ts = api_client.read_tsdata(
-                self.station_id, self.timeseries_id, start_date=start_date
+                self.station_id,
+                self.timeseries_group_id,
+                self.timeseries_id,
+                start_date=start_date,
             )
             new_data = ts.data
             ts.data = old_ts.data.append(new_data, verify_integrity=True, sort=False)

@@ -70,8 +70,8 @@ class AppConfig:
         "base_url": {},
         "station_id": {},
         "timeseries_id": {},
-        "user": {"fallback": ""},
-        "password": {"fallback": ""},
+        "timeseries_group_id": {},
+        "auth_token": {"fallback": ""},
         "file": {},
     }
 
@@ -126,11 +126,14 @@ class AppConfig:
         options["name"] = section
         try:
             options["station_id"] = int(options["station_id"])
+            options["timeseries_group_id"] = int(options["timeseries_group_id"])
             options["timeseries_id"] = int(options["timeseries_id"])
         except ValueError:
             raise WrongValueError(
-                '"{}" or "{}" is not a valid integer'.format(
-                    options["station_id"], options["timeseries_id"]
+                '"{}" or "{}" or "{}" is not a valid integer'.format(
+                    options["station_id"],
+                    options["timeseries_group_id"],
+                    options["timeseries_id"],
                 )
             )
         return options
