@@ -232,6 +232,26 @@ class ConfigurationTestCase(TestCase):
         m.assert_called_once_with()
 
     @patch("enhydris_cache.cli.App._execute")
+    def test_missing_auth_token_makes_it_none(self, m):
+        with open(self.configfilename, "w") as f:
+            f.write(
+                """\
+                    [General]
+                    loglevel = WARNING
+
+                    [Temperature]
+                    base_url = https://openmeteo.org/
+                    station_id = 585
+                    timeseries_group_id = 5850
+                    timeseries_id = 58505
+                    file = /tmp/temperature.hts
+                    """
+            )
+        app = cli.App(self.configfilename)
+        app.run()
+        self.assertIsNone(app.config.timeseries_group[0]["auth_token"])
+
+    @patch("enhydris_cache.cli.App._execute")
     def test_creates_log_file(self, *args):
         logfilename = os.path.join(self.tempdir, "enhydris_cache.log")
         with open(self.configfilename, "w") as f:

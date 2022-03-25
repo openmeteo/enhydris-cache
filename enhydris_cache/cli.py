@@ -71,7 +71,7 @@ class AppConfig:
         "station_id": {},
         "timeseries_id": {},
         "timeseries_group_id": {},
-        "auth_token": {"fallback": ""},
+        "auth_token": {"fallback": None},
         "file": {},
     }
 

@@ -2,6 +2,11 @@
 History
 =======
 
+1.0.1 (2022-03-25)
+==================
+
+- Fixed error when attempting to connect to Enhydris unauthenticated.
+
 1.0.0 (2021-08-31)
 ==================
 
