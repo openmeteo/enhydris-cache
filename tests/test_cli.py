@@ -1,3 +1,4 @@
+import datetime as dt
 import json
 import os
 import shutil
@@ -277,24 +278,27 @@ class ConfigurationTestCase(TestCase):
         self.assertTrue(os.path.exists(logfilename))
 
 
+UTC_PLUS_2 = dt.timezone(dt.timedelta(hours=2))
+
+
 @skipUnless(os.getenv("ENHYDRIS_CACHE_E2E_TEST"), "set ENHYDRIS_CACHE_E2E_TEST")
 class EnhydrisCacheE2eTestCase(TestCase):
     test_timeseries1 = textwrap.dedent(
         """\
-        2014-01-01 08:00,11.00,
-        2014-01-02 08:00,12.00,
-        2014-01-03 08:00,13.00,
-        2014-01-04 08:00,14.00,
-        2014-01-05 08:00,15.00,
+        2014-01-01 08:00,11.0,
+        2014-01-02 08:00,12.0,
+        2014-01-03 08:00,13.0,
+        2014-01-04 08:00,14.0,
+        2014-01-05 08:00,15.0,
         """
     )
     test_timeseries2 = textwrap.dedent(
         """\
-        2014-07-01 08:00,9.11,
-        2014-07-02 08:00,9.12,
-        2014-07-03 08:00,9.13,
-        2014-07-04 08:00,9.14,
-        2014-07-05 08:00,9.15,
+        2014-07-01 08:00,9.1,
+        2014-07-02 08:00,9.2,
+        2014-07-03 08:00,9.3,
+        2014-07-04 08:00,9.4,
+        2014-07-05 08:00,9.5,
         """
     )
     timeseries1_top = "".join(test_timeseries1.splitlines(True)[:-1])
@@ -342,13 +346,13 @@ class EnhydrisCacheE2eTestCase(TestCase):
             self.station_id,
             self.timeseries_group_id,
             self.timeseries1_id,
-            HTimeseries(StringIO(self.timeseries1_top)),
+            HTimeseries(StringIO(self.timeseries1_top), default_tzinfo=UTC_PLUS_2),
         )
         self.api_client.post_tsdata(
             self.station_id,
             self.timeseries_group_id,
             self.timeseries2_id,
-            HTimeseries(StringIO(self.timeseries2_top)),
+            HTimeseries(StringIO(self.timeseries2_top), default_tzinfo=UTC_PLUS_2),
         )
 
         # Prepare a configuration file (some tests override it)
@@ -423,13 +427,13 @@ class EnhydrisCacheE2eTestCase(TestCase):
             self.station_id,
             self.timeseries_group_id,
             self.timeseries1_id,
-            HTimeseries(StringIO(self.timeseries1_bottom)),
+            HTimeseries(StringIO(self.timeseries1_bottom), default_tzinfo=UTC_PLUS_2),
         )
         self.api_client.post_tsdata(
             self.station_id,
             self.timeseries_group_id,
             self.timeseries2_id,
-            HTimeseries(StringIO(self.timeseries2_bottom)),
+            HTimeseries(StringIO(self.timeseries2_bottom), default_tzinfo=UTC_PLUS_2),
         )
 
         # Execute the application again

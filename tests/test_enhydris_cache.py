@@ -36,6 +36,8 @@ test_timeseries["43_top"] = "".join(test_timeseries["43_all"].splitlines(True)[:
 test_timeseries["42_bottom"] = test_timeseries["42_all"].splitlines(True)[-1]
 test_timeseries["43_bottom"] = test_timeseries["43_all"].splitlines(True)[-1]
 
+UTC_PLUS_2 = dt.timezone(dt.timedelta(hours=2))
+
 
 def mock_read_tsdata(
     station_id, timeseries_group_id, timeseries_id, start_date=None, end_date=None
@@ -47,12 +49,14 @@ def mock_read_tsdata(
 
 def _get_hts_object(timeseries_id, start_date):
     timeseries_top = HTimeseries(
-        StringIO(test_timeseries["{}_top".format(timeseries_id)])
+        StringIO(test_timeseries[f"{timeseries_id}_top"]), default_tzinfo=UTC_PLUS_2
     )
-    if start_date is None or start_date == dt.datetime(1, 1, 1, 0, 1):
+    if start_date is None or start_date < dt.datetime(1, 1, 2, 0, 0, tzinfo=UTC_PLUS_2):
         return timeseries_top
     assert start_date == timeseries_top.data.index[-1] + dt.timedelta(minutes=1)
-    result = HTimeseries(StringIO(test_timeseries["{}_bottom".format(timeseries_id)]))
+    result = HTimeseries(
+        StringIO(test_timeseries[f"{timeseries_id}_bottom"]), default_tzinfo=UTC_PLUS_2
+    )
     return result
 
 

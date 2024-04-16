@@ -1,5 +1,6 @@
 import datetime as dt
 
+import pandas as pd
 from enhydris_api_client import EnhydrisApiClient
 from htimeseries import HTimeseries
 
@@ -41,7 +42,7 @@ class TimeseriesCache(object):
             end_date = timeseries.data.index[-1]
         except IndexError:
             # Timeseries is totally empty; no start and end date
-            end_date = dt.datetime(1, 1, 1, 0, 0)
+            end_date = dt.datetime(1, 1, 1, 0, 0, tzinfo=dt.timezone.utc)
         return end_date
 
     def _append_newer_timeseries(self, start_date, old_ts):
@@ -53,5 +54,15 @@ class TimeseriesCache(object):
                 start_date=start_date,
             )
             new_data = ts.data
-            ts.data = old_ts.data.append(new_data, verify_integrity=True, sort=False)
+
+            # For appending to work properly, both time series need to have the same
+            # tz.
+            if len(old_ts.data):
+                new_data.index = new_data.index.tz_convert(old_ts.data.index.tz)
+            else:
+                old_ts.data.index = old_ts.data.index.tz_convert(new_data.index.tz)
+
+            ts.data = pd.concat(
+                [old_ts.data, new_data], verify_integrity=True, sort=False
+            )
         return ts

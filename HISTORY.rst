@@ -2,6 +2,13 @@
 History
 =======
 
+2.0.0 (2024-04-16)
+==================
+
+- Requires enhydris-api-client v.4, and therefore htimeseries v.7, and
+  therefore Python 3.9 or later. See the enhydris-api-client v.4 release
+  notes for more information.
+
 1.0.2 (2023-07-31)
 ==================
 
